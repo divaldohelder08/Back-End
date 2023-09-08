@@ -1,0 +1,11 @@
+POST http://localhost:3333/Create/Funcionario 
+Content-Type: application/json
+Date: {{$datetime rfc1123}}
+
+
+{
+"nome":"Adalberto",
+"nascimento": "{{$datetime '1975-12-24'}}"
+}
+
+
