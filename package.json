@@ -1,5 +1,5 @@
 {
-  "name": "prisma",
+  "name": "BackEnd",
   "version": "1.0.0",
   "description": "",
   "main": "src/routes.ts",
@@ -42,6 +42,7 @@
     "fastify-multer": "^2.0.3",
     "jsonwebtoken": "^9.0.1",
     "multer": "1.4.5-lts.1",
+    "resend": "^1.1.0",
     "zod": "^3.21.4"
   }
 }

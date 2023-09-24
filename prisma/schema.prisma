@@ -12,79 +12,15 @@ datasource db {
 
 generator erd {
   provider = "prisma-erd-generator"
-  theme = "forest"
-
+  theme    = "forest"
 }
 
-model funcionario {
-  id         String   @id @default(cuid())
-  nome       String
-  nascimento DateTime
-  email      String   @unique
-  password   String
-  tels       tels[]
-  Venda      Venda[]
-
-  @@map("fun")
+model User {
+  id       String  @id @default(cuid())
+  avatar   String?
+  username String  @unique
+  nome     String
+  email    String  @unique
+  password String
 }
 
-model tels {
-  id             String      @id @default(cuid())
-  telefone       String      @unique
-  funcionario_id String
-  funcionario    funcionario @relation(fields: [funcionario_id], references: [id])
-}
-
-model Produto {
-  id        String            @id @default(cuid())
-  nome      String            @unique
-  price     Float
-  image     String            @unique
-  Stoke     Stoke[]
-  Vend_Prod Vend_Prod[]
-  cat_prod  ProductCategory[]
-}
-
-model Stoke {
-  id         String   @id @default(cuid())
-  quant      Int
-  updateAt   DateTime @updatedAt
-  produto_id String
-  produto    Produto  @relation(fields: [produto_id], references: [id])
-}
-
-model categoria {
-  id       String            @id @default(cuid())
-  nome     String            @unique
-  describe String?
-  slug     String            @unique
-  cat_prod ProductCategory[]
-}
-
-model ProductCategory {
-  id           String    @id @default(cuid())
-  categoria    categoria @relation(fields: [categoria_id], references: [id])
-  produto      Produto   @relation(fields: [produto_id], references: [id])
-  categoria_id String
-  produto_id   String
-
-  @@map("category_product")
-}
-
-model Venda {
-  id             String      @id @default(cuid())
-  cliente        String
-  data           DateTime    @default(now())
-  funcionario_id String
-  entregue       Float
-  funcionario    funcionario @relation(fields: [funcionario_id], references: [id])
-  Vend_Prod      Vend_Prod[]
-}
-
-model Vend_Prod {
-  id         String  @id @default(cuid())
-  venda      Venda   @relation(fields: [venda_id], references: [id])
-  produto    Produto @relation(fields: [produto_id], references: [id])
-  venda_id   String
-  produto_id String
-}

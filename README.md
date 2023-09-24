@@ -1,4 +1,3 @@
-import { AiFillAliwangwang } from "react-icons/ai"; 
 #Prisma server
 Servidor tsx com o prisma
 
