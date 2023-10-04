@@ -1,9 +1,13 @@
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('ativo', 'pendente');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "avatar" TEXT,
     "username" TEXT NOT NULL,
     "nome" TEXT NOT NULL,
+    "status" "Status" NOT NULL DEFAULT 'pendente',
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
 

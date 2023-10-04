@@ -15,12 +15,17 @@ generator erd {
   theme    = "forest"
 }
 
+enum Status {
+  ativo
+  pendente
+}
+
 model User {
   id       String  @id @default(cuid())
   avatar   String?
   username String  @unique
   nome     String
+  status   Status  @default(pendente)
   email    String  @unique
   password String
 }
-
