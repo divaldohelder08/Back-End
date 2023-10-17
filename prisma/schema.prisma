@@ -26,6 +26,7 @@ model User {
   username String  @unique
   nome     String
   status   Status  @default(pendente)
+  auth     String? 
   email    String  @unique
   password String
 }

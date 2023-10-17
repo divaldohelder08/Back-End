@@ -8,6 +8,7 @@ CREATE TABLE "User" (
     "username" TEXT NOT NULL,
     "nome" TEXT NOT NULL,
     "status" "Status" NOT NULL DEFAULT 'pendente',
+    "auth" TEXT,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
 
