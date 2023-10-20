@@ -1,32 +1,63 @@
-import fastify, { FastifyReply } from "fastify";
+import fastify, { FastifyReply, FastifyRequest } from "fastify";
+import jwt from "jsonwebtoken";
 const app = fastify();
+
 app.register(require("@fastify/cors"));
 
 app.get("/take", (_, reply: FastifyReply) => {
   reply.send({
-    area: {
-      Informática: {
-        10: ["IG10C", "IG11A", "IG12A"],
-        11: ["IG11A", "IG11C"],
+    areas: [
+      {
+        area: "Informática",
+        turmas: {
+          10: ["IG10C",],
+          11: ["IG11A", "IG11C"],
+        },
       },
-      Eletricidade: {
-        10: ["EL10A", "EL10D"],
-        11: ["EL11B", "EL11C"],
+      {
+        area: "Eletricidade",
+        turmas: {
+          10: ["EL10A", "EL10D"],
+          11: ["EL11B", "EL11C"],
+        },
       },
-      Mecânica: {
-        10: ["MC10A", "IG11A"],
-        11: ["MC11B", "IG11A"],
-        12: ["MC12A", "MC12C"],
+      {
+        area: "Mecânica",
+        turmas: {
+          12: ["MC12A", "MC12C"],
+        },
       },
-      "Construção civil": {
-        10: ["CV10A", "CV10B"],
-        11: ["CV11A", "CV11B"],
-        12: ["CV12B"],
+      {
+        area: "Construção civil",
+        turmas:{
+          10: ["CV10A", "CV10B"],
+          12: ["CV12B"],
+        },
       },
-    },
+    ],
   });
 });
 
+
+
+app.post("/auth",(Request:FastifyRequest,reply:FastifyReply)=>{
+    reply.status(200).send({
+      erro: false,
+      mensagem: "Usuário encontrado com sucesso",
+      user: {
+    id: "45sdfsdf@#43";
+    avatar: string | null;
+    nome: string;
+    email: string;
+},
+      //@ts-ignore
+      token: jwt.sign({ id: ifExist.id }, process.env.PRIVATE_KEY, {
+        //expiresIn: 600 //10 min
+        expiresIn: 60, // 1 min
+        //expiresIn: "7d", // 7 dia
+      }),
+    });
+})
 app
   .listen({
     host: "0.0.0.0",
