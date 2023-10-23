@@ -1,4 +1,4 @@
-import fastify, { FastifyReply, FastifyRequest } from "fastify";
+     import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
 const app = fastify();
 
@@ -42,16 +42,15 @@ app.get("/take", (_, reply: FastifyReply) => {
 
 app.post("/auth",(Request:FastifyRequest,reply:FastifyReply)=>{
     reply.status(200).send({
-      erro: false,
       mensagem: "Usuário encontrado com sucesso",
       user: {
-    id: "45sdfsdf@#43";
-    avatar: string | null;
-    nome: string;
-    email: string;
-},
+        id: "45sdfsdf@#43",
+        avatar: "https://github.com/divaldohelder08.png",
+        nome: "Divaldo Hélder",
+        email: "divaldohelder08@gmail.com",
+      },
       //@ts-ignore
-      token: jwt.sign({ id: ifExist.id }, process.env.PRIVATE_KEY, {
+      token: jwt.sign({ id: "45sdfsdf@#43" }, process.env.PRIVATE_KEY, {
         //expiresIn: 600 //10 min
         expiresIn: 60, // 1 min
         //expiresIn: "7d", // 7 dia
