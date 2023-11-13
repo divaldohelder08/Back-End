@@ -4,7 +4,6 @@ const app = fastify();
 
 app.register(require("@fastify/cors"));
 
-
 app.get("/take", (_, reply: FastifyReply) => {
   reply.send({
     areas: [
