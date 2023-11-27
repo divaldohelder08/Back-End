@@ -14,139 +14,144 @@ generator erd {
   theme    = "forest"
 }
 
-model Provincia {
-  id          String        @id @default(cuid())
-  nome        String        @unique
-  codico      String        @unique
-  Cooperativa Cooperativa[]
-
-  @@map("Provincias")
-}
-
-enum Cargo {
-  Recepcionista
-  Gerente
-  Limpeza
-}
-
-enum Status {
+enum StatusEnum {
   Andamento
   Finalizada
   NFinalizada
 }
 
+enum TimeEnum {
+  On
+  Chuva
+  Noite
+  Feriado
+  Brecha
+}
+
 model Cooperativa {
   id          String   @id @default(cuid())
-  nome        String   @unique
+  nome        String   @unique @db.VarChar(100)
   endereco    String   @unique
-  contacto    String   @unique
-  email       String   @unique
-  senha       String
-  provinciaId String
+  localizacao String   @unique
+  status      TimeEnum @default(On)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  provincia_id Provincia     @relation(fields: [provinciaId], references: [id])
-  Veiculo      Veiculo[]
-  Cliente      Cliente[]
-  Motorista    Motorista[]
-  funcionarios Funcionario[]
+  //relações
+  clientes   Cliente[]
+  motoristas Motorista[]
+  Adm        Adm[]
+  Veiculo    Veiculo[]
+  contacto   Contacto_cooperativa[]
 
   @@map("Cooperativas")
 }
 
-model Veiculo {
-  id             String      @id @default(cuid())
-  modelo         String
-  matricula      String      @unique
-  cooperativaId  String
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  Cooperativa_id Cooperativa @relation(fields: [cooperativaId], references: [id])
-  Motorista      Motorista[]
+model Adm {
+  id            String   @id @default(cuid())
+  nome          String   @db.VarChar(150)
+  senha         String
+  email         String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  cooperativaId String   @unique
 
-  @@map("Veiculos")
-}
-
-model Motorista {
-  id             String      @id @default(cuid())
-  nome           String
-  numeroBI       String      @unique
-  nascimento     DateTime
-  cooperativaId  String
-  veiculoId      String
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  Cooperativa_id Cooperativa @relation(fields: [cooperativaId], references: [id])
-  veiculo_id     Veiculo     @relation(fields: [veiculoId], references: [id])
-  recolha        recolha[]
-
-  @@map("Motoristas")
-}
-
-model Funcionario {
-  id            String      @id @default(cuid())
-  nome          String
-  numeroBI      String      @unique
-  cargo         Cargo
-  nascimento    DateTime
-  cooperativaId String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  Coperativa_id Cooperativa @relation(fields: [cooperativaId], references: [id])
-  contactoF     contactoF[]
+  //relações
+  cooperativa Cooperativa @relation(fields: [cooperativaId], references: [id])
 
   @@map("Funcionarios")
 }
 
+model Motorista {
+  id            String      @id @default(cuid())
+  nome          String      @db.VarChar(150)
+  email         String      @unique
+  telefone      String      @unique @db.VarChar(9)
+  numeroBI      String      @unique
+  nascimento    DateTime
+  avatar        String?
+  localizacao   String
+  cooperativaId String
+  veiculoId     String      @unique
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  //relações
+  cooperativa   Cooperativa @relation(fields: [cooperativaId], references: [id])
+  veiculo       Veiculo     @relation(fields: [veiculoId], references: [id])
+  recolhas      Recolha[]
+
+  @@map("Motoristas")
+}
+
+model Veiculo {
+  id            String      @id @default(cuid())
+  modelo        String      @db.VarChar(40)
+  matricula     String      @unique @db.VarChar(15)
+  cooperativaId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  //relações
+  cooperativa   Cooperativa @relation(fields: [cooperativaId], references: [id])
+  motoristas    Motorista[]
+
+  @@map("Veiculos")
+}
+
 model Cliente {
-  id             String      @id @default(cuid())
-  nome           String
-  numeroBI       String      @unique
-  endereco       String
-  coordenadas    String      @unique
-  cooperativaId  String
-  nascimento     DateTime
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  Cooperativa_id Cooperativa @relation(fields: [cooperativaId], references: [id])
-  contactoC      contactoC[]
-  recolha        recolha[]
+  id            String   @id @default(cuid())
+  nome          String   @db.VarChar(250)
+  numeroBI      String   @unique
+  avatar        String?
+  endereco      String
+  coordenadas   String   @unique
+  nascimento    DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  cooperativaId String
+
+  //relações
+  cooperativa Cooperativa         @relation(fields: [cooperativaId], references: [id])
+  contacto    Contacto_clientes[]
+  recolhas    Recolha[]
 
   @@map("Clientes")
 }
 
-model contactoC {
-  id         String   @id @default(cuid())
-  telefone   String   @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  cliente_id Cliente  @relation(fields: [clienteId], references: [id])
-  clienteId  String
+model Contacto_clientes {
+  id        String   @id @default(cuid())
+  clienteId String
+  telefone  String   @unique @db.VarChar(9)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@map("contacto cliente")
+  //relações
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+
+  @@map("Contacto dos Clientes")
 }
 
-model contactoF {
-  id             String      @id @default(cuid())
-  telefone       String      @unique
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  funcionario_id Funcionario @relation(fields: [funcionarioId], references: [id])
-  funcionarioId  String
+model Contacto_cooperativa {
+  id            String   @id @default(cuid())
+  cooperativaId String
+  telefone      String   @unique @db.VarChar(9)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  @@map("contacto funcionario")
+  //relações
+  autor Cooperativa @relation(fields: [cooperativaId], references: [id])
+
+  @@map("Contacto das cooperativas")
 }
 
-model recolha {
-  id     String @id @default(cuid())
-  nome   String @unique
-  status Status
+model Recolha {
+  id          String     @id @default(cuid())
+  clienteId   String
+  motoristaId String
+  status      StatusEnum
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  cliente_id   Cliente   @relation(fields: [clienteId], references: [id])
-  motorista_id Motorista @relation(fields: [motoristaId], references: [id])
-  clienteId    String
-  motoristaId  String
+  //relações
+  cliente   Cliente   @relation(fields: [clienteId], references: [id])
+  motorista Motorista @relation(fields: [motoristaId], references: [id])
 }
