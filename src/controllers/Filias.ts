@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
 import { Prisma } from "../Database/Client";
 
-export class Cooperativa {
+export class Filias {
   async create(request: FastifyRequest, reply: FastifyReply) {
     const info = z.object({
       nome: z.string().max(100, "Max 100").min(1, "Min 1"),
@@ -16,7 +16,7 @@ export class Cooperativa {
       request.body
     );
 
-    return await Prisma.cooperativa.create({
+    return await Prisma.filial.create({
       data: {
         nome,
         endereco,
@@ -43,7 +43,7 @@ export class Cooperativa {
 
     const { id, status } = info.parse(request.body);
 
-    return await Prisma.cooperativa.update({
+    return await Prisma.filial.update({
       data: {
         status,
       },
@@ -54,7 +54,7 @@ export class Cooperativa {
   }
 
   async find() {
-    return await Prisma.cooperativa.findMany();
+    return await Prisma.filial.findMany();
   }
 
   async Motorista(request: FastifyRequest, reply: FastifyReply) {

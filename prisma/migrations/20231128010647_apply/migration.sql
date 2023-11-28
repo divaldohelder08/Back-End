@@ -5,7 +5,7 @@ CREATE TYPE "StatusEnum" AS ENUM ('Andamento', 'Finalizada', 'NFinalizada');
 CREATE TYPE "TimeEnum" AS ENUM ('On', 'Chuva', 'Noite', 'Feriado', 'Brecha');
 
 -- CreateTable
-CREATE TABLE "Cooperativas" (
+CREATE TABLE "Filias" (
     "id" TEXT NOT NULL,
     "nome" VARCHAR(100) NOT NULL,
     "endereco" TEXT NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE "Cooperativas" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Cooperativas_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Filias_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -25,7 +25,7 @@ CREATE TABLE "Funcionarios" (
     "email" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "cooperativaId" TEXT NOT NULL,
+    "filialId" TEXT NOT NULL,
 
     CONSTRAINT "Funcionarios_pkey" PRIMARY KEY ("id")
 );
@@ -40,7 +40,7 @@ CREATE TABLE "Motoristas" (
     "nascimento" TIMESTAMP(3) NOT NULL,
     "avatar" TEXT,
     "localizacao" TEXT NOT NULL,
-    "cooperativaId" TEXT NOT NULL,
+    "filialId" TEXT NOT NULL,
     "veiculoId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE "Veiculos" (
     "id" TEXT NOT NULL,
     "modelo" VARCHAR(40) NOT NULL,
     "matricula" VARCHAR(15) NOT NULL,
-    "cooperativaId" TEXT NOT NULL,
+    "filialId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -71,7 +71,7 @@ CREATE TABLE "Clientes" (
     "nascimento" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "cooperativaId" TEXT NOT NULL,
+    "filialId" TEXT NOT NULL,
 
     CONSTRAINT "Clientes_pkey" PRIMARY KEY ("id")
 );
@@ -90,7 +90,7 @@ CREATE TABLE "Contacto dos Clientes" (
 -- CreateTable
 CREATE TABLE "Contacto das cooperativas" (
     "id" TEXT NOT NULL,
-    "cooperativaId" TEXT NOT NULL,
+    "filialId" TEXT NOT NULL,
     "telefone" VARCHAR(9) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -111,19 +111,19 @@ CREATE TABLE "Recolha" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Cooperativas_nome_key" ON "Cooperativas"("nome");
+CREATE UNIQUE INDEX "Filias_nome_key" ON "Filias"("nome");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Cooperativas_endereco_key" ON "Cooperativas"("endereco");
+CREATE UNIQUE INDEX "Filias_endereco_key" ON "Filias"("endereco");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Cooperativas_localizacao_key" ON "Cooperativas"("localizacao");
+CREATE UNIQUE INDEX "Filias_localizacao_key" ON "Filias"("localizacao");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Funcionarios_email_key" ON "Funcionarios"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Funcionarios_cooperativaId_key" ON "Funcionarios"("cooperativaId");
+CREATE UNIQUE INDEX "Funcionarios_filialId_key" ON "Funcionarios"("filialId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Motoristas_email_key" ON "Motoristas"("email");
@@ -153,25 +153,25 @@ CREATE UNIQUE INDEX "Contacto dos Clientes_telefone_key" ON "Contacto dos Client
 CREATE UNIQUE INDEX "Contacto das cooperativas_telefone_key" ON "Contacto das cooperativas"("telefone");
 
 -- AddForeignKey
-ALTER TABLE "Funcionarios" ADD CONSTRAINT "Funcionarios_cooperativaId_fkey" FOREIGN KEY ("cooperativaId") REFERENCES "Cooperativas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Funcionarios" ADD CONSTRAINT "Funcionarios_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Motoristas" ADD CONSTRAINT "Motoristas_cooperativaId_fkey" FOREIGN KEY ("cooperativaId") REFERENCES "Cooperativas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Motoristas" ADD CONSTRAINT "Motoristas_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Motoristas" ADD CONSTRAINT "Motoristas_veiculoId_fkey" FOREIGN KEY ("veiculoId") REFERENCES "Veiculos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Veiculos" ADD CONSTRAINT "Veiculos_cooperativaId_fkey" FOREIGN KEY ("cooperativaId") REFERENCES "Cooperativas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Veiculos" ADD CONSTRAINT "Veiculos_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Clientes" ADD CONSTRAINT "Clientes_cooperativaId_fkey" FOREIGN KEY ("cooperativaId") REFERENCES "Cooperativas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Clientes" ADD CONSTRAINT "Clientes_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Contacto dos Clientes" ADD CONSTRAINT "Contacto dos Clientes_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Clientes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Contacto das cooperativas" ADD CONSTRAINT "Contacto das cooperativas_cooperativaId_fkey" FOREIGN KEY ("cooperativaId") REFERENCES "Cooperativas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Contacto das cooperativas" ADD CONSTRAINT "Contacto das cooperativas_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Recolha" ADD CONSTRAINT "Recolha_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Clientes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

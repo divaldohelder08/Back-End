@@ -1,11 +1,11 @@
 import fastify, { FastifyReply, FastifyRequest } from "fastify";
-import { Cooperativa } from "./controllers/Cooperativa";
+import { Filias } from "./controllers/Filias";
 
 const app = fastify();
 app.register(require("@fastify/cors"));
-const cooperativa = new Cooperativa();
+const filias = new Filias();
 
-app.get("/cooperativa/find", cooperativa.find);
+app.get("/filias/find", filias.find);
 app.get("/recolhas", (req: FastifyRequest, rep: FastifyReply) => {
   const obg = [
     {

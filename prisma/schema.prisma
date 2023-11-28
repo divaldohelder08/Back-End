@@ -28,7 +28,7 @@ enum TimeEnum {
   Brecha
 }
 
-model Cooperativa {
+model Filial {
   id          String   @id @default(cuid())
   nome        String   @unique @db.VarChar(100)
   endereco    String   @unique
@@ -42,77 +42,77 @@ model Cooperativa {
   motoristas Motorista[]
   Adm        Adm[]
   Veiculo    Veiculo[]
-  contacto   Contacto_cooperativa[]
+  contacto   Contacto_filial[]
 
-  @@map("Cooperativas")
+  @@map("Filias")
 }
 
 model Adm {
-  id            String   @id @default(cuid())
-  nome          String   @db.VarChar(150)
-  senha         String
-  email         String   @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  cooperativaId String   @unique
+  id        String   @id @default(cuid())
+  nome      String   @db.VarChar(150)
+  senha     String
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  filialId  String   @unique
 
   //relações
-  cooperativa Cooperativa @relation(fields: [cooperativaId], references: [id])
+  filial Filial @relation(fields: [filialId], references: [id])
 
   @@map("Funcionarios")
 }
 
 model Motorista {
-  id            String      @id @default(cuid())
-  nome          String      @db.VarChar(150)
-  email         String      @unique
-  telefone      String      @unique @db.VarChar(9)
-  numeroBI      String      @unique
-  nascimento    DateTime
-  avatar        String?
-  localizacao   String
-  cooperativaId String
-  veiculoId     String      @unique
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id          String    @id @default(cuid())
+  nome        String    @db.VarChar(150)
+  email       String    @unique
+  telefone    String    @unique @db.VarChar(9)
+  numeroBI    String    @unique
+  nascimento  DateTime
+  avatar      String?
+  localizacao String
+  filialId    String
+  veiculoId   String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   //relações
-  cooperativa   Cooperativa @relation(fields: [cooperativaId], references: [id])
-  veiculo       Veiculo     @relation(fields: [veiculoId], references: [id])
-  recolhas      Recolha[]
+  filial      Filial    @relation(fields: [filialId], references: [id])
+  veiculo     Veiculo   @relation(fields: [veiculoId], references: [id])
+  recolhas    Recolha[]
 
   @@map("Motoristas")
 }
 
 model Veiculo {
-  id            String      @id @default(cuid())
-  modelo        String      @db.VarChar(40)
-  matricula     String      @unique @db.VarChar(15)
-  cooperativaId String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id         String      @id @default(cuid())
+  modelo     String      @db.VarChar(40)
+  matricula  String      @unique @db.VarChar(15)
+  filialId   String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
   //relações
-  cooperativa   Cooperativa @relation(fields: [cooperativaId], references: [id])
-  motoristas    Motorista[]
+  filial     Filial      @relation(fields: [filialId], references: [id])
+  motoristas Motorista[]
 
   @@map("Veiculos")
 }
 
 model Cliente {
-  id            String   @id @default(cuid())
-  nome          String   @db.VarChar(250)
-  numeroBI      String   @unique
-  avatar        String?
-  endereco      String
-  coordenadas   String   @unique
-  nascimento    DateTime
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  cooperativaId String
+  id          String   @id @default(cuid())
+  nome        String   @db.VarChar(250)
+  numeroBI    String   @unique
+  avatar      String?
+  endereco    String
+  coordenadas String   @unique
+  nascimento  DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  filialId    String
 
   //relações
-  cooperativa Cooperativa         @relation(fields: [cooperativaId], references: [id])
-  contacto    Contacto_clientes[]
-  recolhas    Recolha[]
+  filial   Filial              @relation(fields: [filialId], references: [id])
+  contacto Contacto_clientes[]
+  recolhas Recolha[]
 
   @@map("Clientes")
 }
@@ -130,15 +130,15 @@ model Contacto_clientes {
   @@map("Contacto dos Clientes")
 }
 
-model Contacto_cooperativa {
-  id            String   @id @default(cuid())
-  cooperativaId String
-  telefone      String   @unique @db.VarChar(9)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+model Contacto_filial {
+  id        String   @id @default(cuid())
+  filialId  String
+  telefone  String   @unique @db.VarChar(9)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   //relações
-  autor Cooperativa @relation(fields: [cooperativaId], references: [id])
+  autor Filial @relation(fields: [filialId], references: [id])
 
   @@map("Contacto das cooperativas")
 }
