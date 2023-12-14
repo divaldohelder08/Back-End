@@ -5,7 +5,7 @@
   "main": "src/routes.ts",
   "scripts": {
     "dev": "tsx src/routes.ts",
-    "fake": "tsx src/fake.ts",
+    "lib": "tsx src/lib.ts",
     "mon": "tsnd --respawn --transpile-only src/routes.ts",
     "build": "tsup src",
     "start": "node dist/routes.js",

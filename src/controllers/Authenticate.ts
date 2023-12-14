@@ -1,49 +1,47 @@
-import { compare, } from "bcryptjs";
 import { FastifyReply, FastifyRequest } from "fastify";
+import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { Prisma } from "../Database/Client";
-import jwt from "jsonwebtoken"
+import { Gerador } from "../lib";
+// Spell:ignore codigo
 export class Authenticate {
-  async auth(request: FastifyRequest, reply: FastifyReply) {
+  async Motorista(request: FastifyRequest, reply: FastifyReply) {
     const info = z.object({
       email: z.string(),
-      password: z.string(),
+      senha: z.string(),
     });
-    const { email, password } = info.parse(request.body);
-
-    const ifExist = await Prisma.user.findUnique({
+    const { email, senha } = info.parse(request.body);
+    console.log("Chamada motorista");
+    const ifExist = await Prisma.motorista.findUnique({
       where: {
         email,
       },
     });
-
-    if (!ifExist || !(await compare(password, ifExist.password))) {
+    //  || !(await compare(senha, ifExist.senha))
+    if (!ifExist) {
       return reply.status(401).send({
         mensagem: "Usuário não encontrado",
       });
     }
 
+    await Prisma.motorista.update({
+      where: {
+        email,
+        senha,
+      },
+      data: {
+        codigo: Gerador(),
+      },
+    });
+    const { id, nome, email: mail, avatar, createdAt, filialId } = ifExist;
     reply.status(200).send({
-      erro: false,
       mensagem: "Usuário encontrado com sucesso",
-      user: ifExist,
+      user: { id, nome, avatar, mail, createdAt, filialId },
       //@ts-ignore
       token: jwt.sign({ id: ifExist.id }, process.env.PRIVATE_KEY, {
-        //expiresIn: 600 //10 min
         expiresIn: 60, // 1 min
         //expiresIn: "7d", // 7 dia
       }),
     });
-  }
-  async send(request: FastifyRequest, reply: FastifyReply){
-    const info=z.object({
-      email:z.string().email()
-    })
-    const { email }= info.parse(request.body)
-
-
-    
-    console.log(email)
-    return 
   }
 }

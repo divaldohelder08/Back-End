@@ -57,45 +57,89 @@ export class Filias {
     return await Prisma.filial.findMany();
   }
 
+  async form() {
+    return await Prisma.filial.findMany({
+      select: {
+        nome: true,
+      },
+    });
+  }
+
   async Motorista(request: FastifyRequest, reply: FastifyReply) {
     const info = z.object({
-      cooperativaId: z.string(),
+      filialId: z.string(),
       nome: z.string().max(150, "Max 100").min(1, "Min 1"),
       email: z.string().email(),
       telefone: z.string().max(9, "max 9").min(9, "min 9"),
       numeroBI: z.string().min(1, "Min 1"),
       nascimento: z.string().datetime(),
-      localizacao: z.string(),
-      //veicolo
-      modelo: z.string().max(40, "Max 100").min(1, "Min 1"),
+      //veiculo
       matricula: z.string().max(15, "Max 100").min(1, "Min 1"),
     });
 
+    const { filialId, nome, email, telefone, numeroBI, nascimento, matricula } =
+      info.parse(request.body);
+
+    return await Prisma.motorista.create({
+      data: {
+        nome,
+        email,
+        telefone,
+        numeroBI,
+        nascimento,
+        matricula,
+        filialId,
+      },
+    });
+  }
+
+  async Cliente(request: FastifyRequest, reply: FastifyReply) {
+    const info = z.object({
+      filialId: z.string(),
+      nome: z.string().max(150, "Max 100").min(1, "Min 1"),
+      email: z.string().email(),
+      numeroBI: z.string().min(1, "Min 1"),
+      telefone: z.string().max(9, "max 9").min(9, "min 9"),
+      telefone1: z.string().max(9, "max 9").min(9, "min 9"),
+      endereco: z.string(),
+      coordenadas: z.string(),
+      nascimento: z.string().datetime(),
+    });
+
+
+    
     const {
-      cooperativaId,
+      filialId,
       nome,
       email,
-      telefone,
       numeroBI,
+      telefone,
+      telefone1,
+      endereco,
+      coordenadas,
       nascimento,
-      localizacao,
-      modelo,
-      matricula,
     } = info.parse(request.body);
 
-    //     return await Prisma.motorista.create({
-    //       data: {
-    //         nome,
-    //         email,
-    //         telefone,
-    //         numeroBI,
-    //         localizacao,
-    //         nascimento,
-    //         cooperativaId,
-    // }
-    //     });
-
-    //  String
-    // veiculoId     String      @unique
+    return await Prisma.cliente.create({
+      data: {
+        nome,
+        email,
+        numeroBI,
+        nascimento,
+        filialId,
+        coordenadas,
+        endereco,
+        contacto: {
+          create: [
+            {
+              telefone,
+            },
+            {
+              telefone: telefone1,
+            },
+          ],
+        },
+      },
+    });
   }
 }

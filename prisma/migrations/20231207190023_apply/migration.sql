@@ -9,7 +9,6 @@ CREATE TABLE "Filias" (
     "id" TEXT NOT NULL,
     "nome" VARCHAR(100) NOT NULL,
     "endereco" TEXT NOT NULL,
-    "localizacao" TEXT NOT NULL,
     "status" "TimeEnum" NOT NULL DEFAULT 'On',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -34,14 +33,15 @@ CREATE TABLE "Funcionarios" (
 CREATE TABLE "Motoristas" (
     "id" TEXT NOT NULL,
     "nome" VARCHAR(150) NOT NULL,
-    "email" TEXT NOT NULL,
+    "email" TEXT,
+    "senha" VARCHAR(10) NOT NULL,
+    "codigo" VARCHAR(6),
     "telefone" VARCHAR(9) NOT NULL,
     "numeroBI" TEXT NOT NULL,
     "nascimento" TIMESTAMP(3) NOT NULL,
     "avatar" TEXT,
     "localizacao" TEXT NOT NULL,
     "filialId" TEXT NOT NULL,
-    "veiculoId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -49,25 +49,24 @@ CREATE TABLE "Motoristas" (
 );
 
 -- CreateTable
-CREATE TABLE "Veiculos" (
+CREATE TABLE "Veiculo" (
     "id" TEXT NOT NULL,
-    "modelo" VARCHAR(40) NOT NULL,
     "matricula" VARCHAR(15) NOT NULL,
-    "filialId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Veiculos_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Veiculo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Clientes" (
     "id" TEXT NOT NULL,
     "nome" VARCHAR(250) NOT NULL,
-    "numeroBI" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "numeroBI" VARCHAR(30) NOT NULL,
     "avatar" TEXT,
     "endereco" TEXT NOT NULL,
-    "coordenadas" TEXT NOT NULL,
+    "Coordenada da casa" TEXT NOT NULL,
     "nascimento" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -99,15 +98,16 @@ CREATE TABLE "Contacto das cooperativas" (
 );
 
 -- CreateTable
-CREATE TABLE "Recolha" (
+CREATE TABLE "Recolhas" (
     "id" TEXT NOT NULL,
     "clienteId" TEXT NOT NULL,
     "motoristaId" TEXT NOT NULL,
-    "status" "StatusEnum" NOT NULL,
+    "status" "StatusEnum" NOT NULL DEFAULT 'Andamento',
+    "descricao" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Recolha_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Recolhas_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -115,9 +115,6 @@ CREATE UNIQUE INDEX "Filias_nome_key" ON "Filias"("nome");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Filias_endereco_key" ON "Filias"("endereco");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Filias_localizacao_key" ON "Filias"("localizacao");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Funcionarios_email_key" ON "Funcionarios"("email");
@@ -135,16 +132,16 @@ CREATE UNIQUE INDEX "Motoristas_telefone_key" ON "Motoristas"("telefone");
 CREATE UNIQUE INDEX "Motoristas_numeroBI_key" ON "Motoristas"("numeroBI");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Motoristas_veiculoId_key" ON "Motoristas"("veiculoId");
+CREATE UNIQUE INDEX "Veiculo_matricula_key" ON "Veiculo"("matricula");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Veiculos_matricula_key" ON "Veiculos"("matricula");
+CREATE UNIQUE INDEX "Clientes_email_key" ON "Clientes"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Clientes_numeroBI_key" ON "Clientes"("numeroBI");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Clientes_coordenadas_key" ON "Clientes"("coordenadas");
+CREATE UNIQUE INDEX "Clientes_Coordenada da casa_key" ON "Clientes"("Coordenada da casa");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Contacto dos Clientes_telefone_key" ON "Contacto dos Clientes"("telefone");
@@ -159,12 +156,6 @@ ALTER TABLE "Funcionarios" ADD CONSTRAINT "Funcionarios_filialId_fkey" FOREIGN K
 ALTER TABLE "Motoristas" ADD CONSTRAINT "Motoristas_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Motoristas" ADD CONSTRAINT "Motoristas_veiculoId_fkey" FOREIGN KEY ("veiculoId") REFERENCES "Veiculos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Veiculos" ADD CONSTRAINT "Veiculos_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Clientes" ADD CONSTRAINT "Clientes_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -174,7 +165,7 @@ ALTER TABLE "Contacto dos Clientes" ADD CONSTRAINT "Contacto dos Clientes_client
 ALTER TABLE "Contacto das cooperativas" ADD CONSTRAINT "Contacto das cooperativas_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Recolha" ADD CONSTRAINT "Recolha_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Clientes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Recolhas" ADD CONSTRAINT "Recolhas_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Clientes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Recolha" ADD CONSTRAINT "Recolha_motoristaId_fkey" FOREIGN KEY ("motoristaId") REFERENCES "Motoristas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Recolhas" ADD CONSTRAINT "Recolhas_motoristaId_fkey" FOREIGN KEY ("motoristaId") REFERENCES "Motoristas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

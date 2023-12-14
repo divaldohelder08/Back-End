@@ -1,11 +1,7 @@
-POST http://localhost:3333/Create/Funcionario 
+POST http://localhost:3333/motorista/confirm 
 Content-Type: application/json
-Date: {{$datetime rfc1123}}
-
 
 {
-"nome":"Adalberto",
-"nascimento": "{{$datetime '1975-12-24'}}"
+"email":"fernandosebastiao888@gmail.com",
+"codigo": "546658"
 }
-
-

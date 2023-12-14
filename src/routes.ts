@@ -1,44 +1,22 @@
-import fastify, { FastifyReply, FastifyRequest } from "fastify";
+import fastify from "fastify";
+import { Authenticate } from "./controllers/Authenticate";
 import { Filias } from "./controllers/Filias";
+import { Motorista } from "./controllers/Motorista";
 
 const app = fastify();
 app.register(require("@fastify/cors"));
 const filias = new Filias();
+const motorista = new Motorista();
+const authenticate = new Authenticate();
+
+// Motorista
+app.post("/auth/motorista", authenticate.Motorista);
 
 app.get("/filias/find", filias.find);
-app.get("/recolhas", (req: FastifyRequest, rep: FastifyReply) => {
-  const obg = [
-    {
-      id: 1,
-      data: "20/05/2005",
-    },
-    {
-      id: 23456,
-      data: "20/05/2005",
-    },
-    {
-      id: 2,
-      data: "20/05/2005",
-    },
-    {
-      id: 3,
-      data: "20/05/2005",
-    },
-    {
-      id: 4,
-      data: "20/05/2005",
-    },
-    {
-      id: 5,
-      data: "20/05/2005",
-    },
-    {
-      id: 6,
-      data: "20/05/2005",
-    },
-  ];
-  rep.send(obg);
-});
+app.get("/filias/form/find", filias.form);
+app.post("/motorista/confirm", motorista.confirm);
+app.get("/recolha/:motoristaId", motorista.recolha);
+
 app
   .listen({
     host: "0.0.0.0",

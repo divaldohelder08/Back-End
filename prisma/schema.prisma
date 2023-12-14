@@ -29,19 +29,17 @@ enum TimeEnum {
 }
 
 model Filial {
-  id          String   @id @default(cuid())
-  nome        String   @unique @db.VarChar(100)
-  endereco    String   @unique
-  localizacao String   @unique
-  status      TimeEnum @default(On)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  nome      String   @unique @db.VarChar(100)
+  endereco  String   @unique
+  status    TimeEnum @default(On)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   //relações
   clientes   Cliente[]
   motoristas Motorista[]
   Adm        Adm[]
-  Veiculo    Veiculo[]
   contacto   Contacto_filial[]
 
   @@map("Filias")
@@ -57,60 +55,64 @@ model Adm {
   filialId  String   @unique
 
   //relações
-  filial Filial @relation(fields: [filialId], references: [id])
+  filial Filial @relation(fields: [filialId], references: [id], onDelete: Cascade)
 
   @@map("Funcionarios")
 }
 
+//model SessionM {
+ // id          String    @id @default(cuid())
+ // token       String    @unique
+ // expir       DateTime
+ // motoristaId String
+ // motorista   Motorista @relation(fields: [motoristaId], references: [id])
+//}
+
 model Motorista {
-  id          String    @id @default(cuid())
-  nome        String    @db.VarChar(150)
-  email       String    @unique
-  telefone    String    @unique @db.VarChar(9)
-  numeroBI    String    @unique
+  id          String   @id @default(cuid())
+  nome        String   @db.VarChar(150)
+  email       String?  @unique
+  senha       String   @db.VarChar(10)
+  codigo      String?  @db.VarChar(6)
+  telefone    String   @unique @db.VarChar(9)
+  numeroBI    String   @unique
   nascimento  DateTime
   avatar      String?
   localizacao String
   filialId    String
-  veiculoId   String    @unique
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   //relações
-  filial      Filial    @relation(fields: [filialId], references: [id])
-  veiculo     Veiculo   @relation(fields: [veiculoId], references: [id])
-  recolhas    Recolha[]
+  filial   Filial     @relation(fields: [filialId], references: [id], onDelete: Cascade)
+  recolhas Recolha[]
 
   @@map("Motoristas")
 }
 
 model Veiculo {
-  id         String      @id @default(cuid())
-  modelo     String      @db.VarChar(40)
-  matricula  String      @unique @db.VarChar(15)
-  filialId   String
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  //relações
-  filial     Filial      @relation(fields: [filialId], references: [id])
-  motoristas Motorista[]
-
-  @@map("Veiculos")
+  id        String   @id @default(cuid())
+  matricula String   @unique @db.VarChar(15)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Cliente {
   id          String   @id @default(cuid())
   nome        String   @db.VarChar(250)
-  numeroBI    String   @unique
+  email       String   @unique
+  numeroBI    String   @unique @db.VarChar(30)
   avatar      String?
   endereco    String
-  coordenadas String   @unique
+  coordenadas String   @unique @map("Coordenada da casa")
   nascimento  DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   filialId    String
 
   //relações
-  filial   Filial              @relation(fields: [filialId], references: [id])
+  filial   Filial              @relation(fields: [filialId], references: [id], onDelete: Cascade)
   contacto Contacto_clientes[]
   recolhas Recolha[]
 
@@ -125,7 +127,7 @@ model Contacto_clientes {
   updatedAt DateTime @updatedAt
 
   //relações
-  cliente Cliente @relation(fields: [clienteId], references: [id])
+  cliente Cliente @relation(fields: [clienteId], references: [id], onDelete: Cascade)
 
   @@map("Contacto dos Clientes")
 }
@@ -138,20 +140,23 @@ model Contacto_filial {
   updatedAt DateTime @updatedAt
 
   //relações
-  autor Filial @relation(fields: [filialId], references: [id])
+  autor Filial @relation(fields: [filialId], references: [id], onDelete: Cascade)
 
   @@map("Contacto das cooperativas")
 }
 
 model Recolha {
-  id          String     @id @default(cuid())
+  id          String     @id @default(uuid())
   clienteId   String
   motoristaId String
-  status      StatusEnum
+  status      StatusEnum @default(Andamento)
+  descricao   String?    @db.Text
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
   //relações
-  cliente   Cliente   @relation(fields: [clienteId], references: [id])
-  motorista Motorista @relation(fields: [motoristaId], references: [id])
+  cliente   Cliente   @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  motorista Motorista @relation(fields: [motoristaId], references: [id], onDelete: Cascade)
+
+  @@map("Recolhas")
 }
