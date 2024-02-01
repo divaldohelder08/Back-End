@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { Prisma } from "../Database/Client";
+import { Prisma } from "../db/Client";
 
 export class Filias {
   async create(request: FastifyRequest, reply: FastifyReply) {
@@ -106,8 +106,6 @@ export class Filias {
       nascimento: z.string().datetime(),
     });
 
-
-    
     const {
       filialId,
       nome,

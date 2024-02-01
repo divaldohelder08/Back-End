@@ -39,33 +39,44 @@ model Filial {
   //relações
   clientes   Cliente[]
   motoristas Motorista[]
-  Adm        Adm[]
+  Adm        Admin[]
   contacto   Contacto_filial[]
 
   @@map("Filias")
 }
 
-model Adm {
+model authLinksAdmin {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  adminId   String
+  createdAt DateTime @default(now())
+
+  admin Admin @relation(fields: [adminId], references: [id])
+
+  @@map("auth_links_admin")
+}
+
+model Admin {
   id        String   @id @default(cuid())
   nome      String   @db.VarChar(150)
-  senha     String
   email     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   filialId  String   @unique
 
   //relações
-  filial Filial @relation(fields: [filialId], references: [id], onDelete: Cascade)
+  filial         Filial           @relation(fields: [filialId], references: [id], onDelete: Cascade)
+  authLinksAdmin authLinksAdmin[]
 
   @@map("Funcionarios")
 }
 
 //model SessionM {
- // id          String    @id @default(cuid())
- // token       String    @unique
- // expir       DateTime
- // motoristaId String
- // motorista   Motorista @relation(fields: [motoristaId], references: [id])
+// id          String    @id @default(cuid())
+// token       String    @unique
+// expir       DateTime
+// motoristaId String
+// motorista   Motorista @relation(fields: [motoristaId], references: [id])
 //}
 
 model Motorista {
@@ -85,7 +96,7 @@ model Motorista {
   updatedAt DateTime @updatedAt
 
   //relações
-  filial   Filial     @relation(fields: [filialId], references: [id], onDelete: Cascade)
+  filial   Filial    @relation(fields: [filialId], references: [id], onDelete: Cascade)
   recolhas Recolha[]
 
   @@map("Motoristas")

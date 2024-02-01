@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
 import { Resend } from "resend";
 import { z } from "zod";
-import { Prisma } from "../Database/Client";
+import { Prisma } from "../db/Client";
 
 export class UserController {
   async create(request: FastifyRequest, reply: FastifyReply) {
@@ -174,7 +174,7 @@ export class UserController {
         ) {
           reply.status(200).send({
             message: "E-mail confirmado com sucesso.",
-             });
+          });
         }
 
         await Prisma.user.update({

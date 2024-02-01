@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { Prisma } from "../Database/Client";
+import { Prisma } from "../db/Client";
 
 export class Recolhas {
   async create(req: FastifyRequest, rep: FastifyReply) {

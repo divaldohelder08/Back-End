@@ -150,22 +150,22 @@ CREATE UNIQUE INDEX "Contacto dos Clientes_telefone_key" ON "Contacto dos Client
 CREATE UNIQUE INDEX "Contacto das cooperativas_telefone_key" ON "Contacto das cooperativas"("telefone");
 
 -- AddForeignKey
-ALTER TABLE "Funcionarios" ADD CONSTRAINT "Funcionarios_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Funcionarios" ADD CONSTRAINT "Funcionarios_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Motoristas" ADD CONSTRAINT "Motoristas_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Motoristas" ADD CONSTRAINT "Motoristas_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Clientes" ADD CONSTRAINT "Clientes_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Clientes" ADD CONSTRAINT "Clientes_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Contacto dos Clientes" ADD CONSTRAINT "Contacto dos Clientes_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Clientes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Contacto dos Clientes" ADD CONSTRAINT "Contacto dos Clientes_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Clientes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Contacto das cooperativas" ADD CONSTRAINT "Contacto das cooperativas_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Contacto das cooperativas" ADD CONSTRAINT "Contacto das cooperativas_filialId_fkey" FOREIGN KEY ("filialId") REFERENCES "Filias"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Recolhas" ADD CONSTRAINT "Recolhas_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Clientes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Recolhas" ADD CONSTRAINT "Recolhas_clienteId_fkey" FOREIGN KEY ("clienteId") REFERENCES "Clientes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Recolhas" ADD CONSTRAINT "Recolhas_motoristaId_fkey" FOREIGN KEY ("motoristaId") REFERENCES "Motoristas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Recolhas" ADD CONSTRAINT "Recolhas_motoristaId_fkey" FOREIGN KEY ("motoristaId") REFERENCES "Motoristas"("id") ON DELETE CASCADE ON UPDATE CASCADE;

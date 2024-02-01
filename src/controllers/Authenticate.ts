@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
-import { Prisma } from "../Database/Client";
+import { Prisma } from "../db/Client";
 import { Gerador } from "../lib";
 // Spell:ignore codigo
 export class Authenticate {

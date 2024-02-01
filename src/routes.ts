@@ -22,5 +22,5 @@ app
     host: "0.0.0.0",
     port: process.env.PORT ? Number(process.env.PORT) : 3333,
   })
-  .then(() => console.log("Server HTTP on http://localhost:3333"))
+  .then(() => console.log(`🔥 HTTP server running at http://localhost:3333`))
   .catch((error) => console.error("aconteceu algum erro: %d", error));

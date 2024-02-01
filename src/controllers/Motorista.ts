@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { z } from "zod";
-import { Prisma } from "../Database/Client";
+import { Prisma } from "../db/Client";
 // Spell:ignore endereco,codigo
 export class Motorista {
   async recolha(req: FastifyRequest, rep: FastifyReply) {
@@ -48,27 +48,26 @@ export class Motorista {
 
     const { codigo, email } = info.parse(req.body);
 
-    const respo= await Prisma.motorista.findUnique({
+    const respo = await Prisma.motorista.findUnique({
       where: {
         email,
         codigo,
       },
     });
 
-    if(respo===null || respo===undefined){
+    if (respo === null || respo === undefined) {
       rep.send("Código invalido").status(500);
-    }else{
+    } else {
       await Prisma.motorista.update({
-         where:{
+        where: {
           email,
-          codigo
+          codigo,
         },
-        data:{
-          codigo:null
-        }
-       
-      })
-      rep.send(respo)
+        data: {
+          codigo: null,
+        },
+      });
+      rep.send(respo);
     }
   }
 }
